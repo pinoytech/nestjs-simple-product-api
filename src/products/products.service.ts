@@ -1,100 +1,60 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { v4 as uuidv4 } from 'uuid';
+import { InjectRepository } from '@nestjs/typeorm';
 
-import { Product, ProductStatus } from './product.model';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductFilterDto } from './dto/filter-product.dto';
+import { ProductRepository } from './product.repository';
+import { Product } from './product.entity';
+import { ProductStatus } from './product-status.enum';
 
 @Injectable()
 export class ProductsService {
-  private products: Product[] = [];
+  constructor(
+    @InjectRepository(ProductRepository)
+    private productRepository: ProductRepository,
+  ) {}
 
-  createProduct(createProductDto: CreateProductDto): Product {
-    const { name, description, price, status } = createProductDto;
-    const product: Product = {
-      id: uuidv4(),
-      name,
-      description,
-      price,
-      status,
-    };
-    this.products.push(product);
-    return product;
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    return this.productRepository.createProduct(createProductDto);
   }
 
-  getAllProducts() {
-    return [...this.products];
+  async getAllProducts(filterDto: ProductFilterDto): Promise<Product[]> {
+    return this.productRepository.getAllProducts(filterDto);
   }
 
-  getProduct(productId: string): Product {
-    const [product] = this.findProduct(productId);
-    return { ...product };
+  async updateProduct(
+    id: number,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
+    const product = await this.productRepository.findOne(id);
+    const updatedProduct = { ...product, ...updateProductDto };
+    return this.productRepository.save(updatedProduct);
   }
 
-  getProductsWithFilters(filterDto: ProductFilterDto): Product[] {
-    const { status, search } = filterDto;
-
-    let products = this.getAllProducts();
-
-    if (status) {
-      products = products.filter(product => product.status === status);
-    }
-
-    if (search) {
-      products = products.filter(product => {
-        return (
-          product.name.toLowerCase().includes(search.toLowerCase()) ||
-          product.description.toLowerCase().includes(search.toLowerCase())
-        );
-      });
-    }
-
-    return products;
-  }
-
-  updateProduct(id: string, updateProductDto: UpdateProductDto): Product {
-    const [product, productIndex] = this.findProduct(id);
-
-    let updatedProduct = { ...product };
-    const { name, description, price } = updateProductDto;
-
-    if (name) {
-      updatedProduct.name = updateProductDto.name;
-    }
-
-    if (description) {
-      updatedProduct.description = description;
-    }
-
-    if (price) {
-      updatedProduct.price = price;
-    }
-
-    this.products[productIndex] = updatedProduct;
-
-    return this.products[productIndex];
-  }
-
-  updateProductStatus(id: string, status: ProductStatus): Product {
-    const [product] = this.findProduct(id);
+  async updateProductStatus(
+    id: number,
+    status: ProductStatus,
+  ): Promise<Product> {
+    const product = await this.getProductById(id);
     product.status = status;
+    await product.save();
     return product;
   }
 
-  deleteProduct(id: string): void {
-    const [_, productIndex] = this.findProduct(id);
-    this.products.splice(productIndex, 1);
+  async deleteProduct(id: number): Promise<void> {
+    const result = await this.productRepository.delete(id);
+    console.log(result);
+    if (!result.affected) {
+      throw new NotFoundException('Could not find product.');
+    }
   }
 
-  private findProduct(id: string): [Product, number] {
-    const productIndex = this.products.findIndex(prod => prod.id === id);
-    const product = this.products[productIndex];
-
+  async getProductById(id: number): Promise<Product> {
+    const product = await this.productRepository.findOne(id);
     if (!product) {
       throw new NotFoundException('Could not find product.');
     }
-
-    return [product, productIndex];
+    return product;
   }
 }

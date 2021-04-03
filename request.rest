@@ -2,24 +2,24 @@ POST http://localhost:3000/products
 content-type: application/json
 
 {
-  "name": "Tuna",
+  "name": "Tuna 8",
   "description": "canned fish",
   "price": "1000",
   "status": "DRAFT"
 }
 
 ###
-PATCH http://localhost:3000/products/612cf159-2ed3-40d3-bb2e-6cb61a9d0ead
+PATCH http://localhost:3000/products/6
 content-type: application/json
 
 {
-  "name": "Tuna 5",
-  "description": "canned fish 2",
-  "price": "1000"
+  "name": "Tuna 3",
+  "description": "canned fish 3",
+  "price": "1300"
 }
 
 ###
-PATCH http://localhost:3000/products/612cf159-2ed3-40d3-bb2e-6cb61a9d0ead/status
+PATCH http://localhost:3000/products/5/status
 content-type: application/json
 
 {
@@ -31,7 +31,7 @@ GET http://localhost:3000/products/56789
 content-type: application/json
 
 ###
-GET http://localhost:3000/products/612cf159-2ed3-40d3-bb2e-6cb61a9d0ead
+GET http://localhost:3000/products/5
 content-type: application/json
 
 ###
@@ -43,7 +43,7 @@ GET http://localhost:3000/products?search=randomtext
 content-type: application/json
 
 ###
-GET http://localhost:3000/products?search=tuna
+GET http://localhost:3000/products?search=Tuna
 content-type: application/json
 
 ###
@@ -52,4 +52,8 @@ content-type: application/json
 
 ###
 GET http://localhost:3000/products
+content-type: application/json
+
+###
+DELETE  http://localhost:3000/products/5
 content-type: application/json

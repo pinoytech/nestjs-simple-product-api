@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsIn } from 'class-validator';
-import { ProductStatus } from '../product.model';
+import { ProductStatus } from '../product-status.enum';
 
 export class CreateProductDto {
   @IsNotEmpty()
