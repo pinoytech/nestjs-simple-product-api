@@ -1,20 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuidv4 } from 'uuid';
 
-import { Product } from './product.model';
+import { Product, ProductStatus } from './product.model';
 import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { ProductFilterDto } from './dto/filter-product.dto';
 
 @Injectable()
 export class ProductsService {
   private products: Product[] = [];
 
   createProduct(createProductDto: CreateProductDto): Product {
-    const { name, description, price } = createProductDto;
+    const { name, description, price, status } = createProductDto;
     const product: Product = {
       id: uuidv4(),
       name,
       description,
       price,
+      status,
     };
     this.products.push(product);
     return product;
@@ -24,23 +27,40 @@ export class ProductsService {
     return [...this.products];
   }
 
-  getProduct(productId: string) {
+  getProduct(productId: string): Product {
     const [product] = this.findProduct(productId);
     return { ...product };
   }
 
-  updateProduct(
-    id: string,
-    name: string,
-    description: string,
-    price: number,
-  ): Product {
+  getProductsWithFilters(filterDto: ProductFilterDto): Product[] {
+    const { status, search } = filterDto;
+
+    let products = this.getAllProducts();
+
+    if (status) {
+      products = products.filter(product => product.status === status);
+    }
+
+    if (search) {
+      products = products.filter(product => {
+        return (
+          product.name.toLowerCase().includes(search.toLowerCase()) ||
+          product.description.toLowerCase().includes(search.toLowerCase())
+        );
+      });
+    }
+
+    return products;
+  }
+
+  updateProduct(id: string, updateProductDto: UpdateProductDto): Product {
     const [product, productIndex] = this.findProduct(id);
 
     let updatedProduct = { ...product };
+    const { name, description, price } = updateProductDto;
 
     if (name) {
-      updatedProduct.name = name;
+      updatedProduct.name = updateProductDto.name;
     }
 
     if (description) {
@@ -51,10 +71,18 @@ export class ProductsService {
       updatedProduct.price = price;
     }
 
-    return (this.products[productIndex] = updatedProduct);
+    this.products[productIndex] = updatedProduct;
+
+    return this.products[productIndex];
   }
 
-  deleteProduct(id: string) {
+  updateProductStatus(id: string, status: ProductStatus): Product {
+    const [product] = this.findProduct(id);
+    product.status = status;
+    return product;
+  }
+
+  deleteProduct(id: string): void {
     const [_, productIndex] = this.findProduct(id);
     this.products.splice(productIndex, 1);
   }

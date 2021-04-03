@@ -3,4 +3,10 @@ export interface Product {
   name: string;
   description: string;
   price: number;
+  status: ProductStatus;
+}
+
+export enum ProductStatus {
+  PUBLISHED = 'PUBLISHED',
+  DRAFT = 'DRAFT',
 }

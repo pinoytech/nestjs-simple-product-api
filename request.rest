@@ -1,0 +1,55 @@
+POST http://localhost:3000/products
+content-type: application/json
+
+{
+  "name": "Tuna",
+  "description": "canned fish",
+  "price": "1000",
+  "status": "DRAFT"
+}
+
+###
+PATCH http://localhost:3000/products/612cf159-2ed3-40d3-bb2e-6cb61a9d0ead
+content-type: application/json
+
+{
+  "name": "Tuna 5",
+  "description": "canned fish 2",
+  "price": "1000"
+}
+
+###
+PATCH http://localhost:3000/products/612cf159-2ed3-40d3-bb2e-6cb61a9d0ead/status
+content-type: application/json
+
+{
+  "status": "PUBLISHED"
+}
+
+###
+GET http://localhost:3000/products/56789
+content-type: application/json
+
+###
+GET http://localhost:3000/products/612cf159-2ed3-40d3-bb2e-6cb61a9d0ead
+content-type: application/json
+
+###
+GET http://localhost:3000/products?status=DRAFT
+content-type: application/json
+
+###
+GET http://localhost:3000/products?search=randomtext
+content-type: application/json
+
+###
+GET http://localhost:3000/products?search=tuna
+content-type: application/json
+
+###
+GET http://localhost:3000/products?status=COMPLETED
+content-type: application/json
+
+###
+GET http://localhost:3000/products
+content-type: application/json
