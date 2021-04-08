@@ -1,0 +1,68 @@
+POST http://localhost:3000/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+{
+  "name": "Tuna 9",
+  "description": "canned tuna",
+  "price": "1300",
+  "status": "DRAFT"
+}
+
+###
+PATCH http://localhost:3000/products/1
+content-type: application/json
+
+{
+  "name": "Tuna 3",
+  "description": "canned fish 3",
+  "price": "1300"
+}
+
+###
+PATCH http://localhost:3000/products/1/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+{
+  "status": "PUBLISHED"
+}
+
+###
+GET http://localhost:3000/products/56789
+content-type: application/json
+
+###
+GET http://localhost:3000/products/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+###
+GET http://localhost:3000/products?status=DRAFT
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+###
+GET http://localhost:3000/products?search=randomtext
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+###
+GET http://localhost:3000/products?search=Tuna
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+###
+GET http://localhost:3000/products?status=COMPLETED
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+###
+GET http://localhost:3000/products
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
+
+###
+DELETE  http://localhost:3000/products/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lLSIsImlhdCI6MTYxNzg3NDQ5OSwiZXhwIjoxNjE3ODc4MDk5fQ.Pi3-E5sI62M-tnwx1RhYuIZhpcfMbM6mgiUk6OY7OGo
+content-type: application/json
