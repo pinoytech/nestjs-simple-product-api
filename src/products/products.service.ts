@@ -7,6 +7,7 @@ import { ProductFilterDto } from './dto/filter-product.dto';
 import { ProductRepository } from './product.repository';
 import { Product } from './product.entity';
 import { ProductStatus } from './product-status.enum';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class ProductsService {
@@ -15,8 +16,11 @@ export class ProductsService {
     private productRepository: ProductRepository,
   ) {}
 
-  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-    return this.productRepository.createProduct(createProductDto);
+  async createProduct(
+    createProductDto: CreateProductDto,
+    user: User,
+  ): Promise<Product> {
+    return this.productRepository.createProduct(createProductDto, user);
   }
 
   async getAllProducts(filterDto: ProductFilterDto): Promise<Product[]> {

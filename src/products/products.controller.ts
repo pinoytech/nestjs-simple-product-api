@@ -21,6 +21,8 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductFilterDto } from './dto/filter-product.dto';
 import { Product } from './product.entity';
 import { ProductStatus } from './product-status.enum';
+import { User } from 'src/auth/user.entity';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @Controller('products')
 @UseGuards(AuthGuard())
@@ -29,8 +31,11 @@ export class ProductsController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createProduct(@Body() createProductDto: CreateProductDto): Promise<Product> {
-    return this.productsService.createProduct(createProductDto);
+  createProduct(
+    @Body() createProductDto: CreateProductDto,
+    @GetUser() user: User,
+  ): Promise<Product> {
+    return this.productsService.createProduct(createProductDto, user);
   }
 
   @Get()

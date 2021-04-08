@@ -1,4 +1,11 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { User } from 'src/auth/user.entity';
+import {
+  BaseEntity,
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+} from 'typeorm';
 
 import { ProductStatus } from './product-status.enum';
 
@@ -18,4 +25,11 @@ export class Product extends BaseEntity {
 
   @Column()
   status: ProductStatus;
+
+  @ManyToOne(
+    type => User,
+    user => user.products,
+    { eager: false },
+  )
+  user: User;
 }
