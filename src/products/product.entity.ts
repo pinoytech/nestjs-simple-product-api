@@ -32,4 +32,7 @@ export class Product extends BaseEntity {
     { eager: false },
   )
   user: User;
+
+  @Column()
+  userId: number;
 }

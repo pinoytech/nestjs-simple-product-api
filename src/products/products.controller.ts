@@ -41,33 +41,42 @@ export class ProductsController {
   @Get()
   getAllProducts(
     @Query(ValidationPipe) filterDto: ProductFilterDto,
+    @GetUser() user: User,
   ): Promise<Product[]> {
-    return this.productsService.getAllProducts(filterDto);
+    return this.productsService.getAllProducts(filterDto, user);
   }
 
   @Get('/:id')
-  getProduct(@Param('id', ParseIntPipe) id: number): Promise<Product> {
-    return this.productsService.getProductById(id);
+  getProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<Product> {
+    return this.productsService.getProductById(id, user);
   }
 
   @Patch('/:id')
   updateProduct(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProductDto: UpdateProductDto,
+    @GetUser() user: User,
   ): Promise<Product> {
-    return this.productsService.updateProduct(id, updateProductDto);
+    return this.productsService.updateProduct(id, updateProductDto, user);
   }
 
   @Patch('/:id/status')
   updateProductStatus(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', ProductStatusValidationPipe) status: ProductStatus,
+    @GetUser() user: User,
   ): Promise<Product> {
-    return this.productsService.updateProductStatus(id, status);
+    return this.productsService.updateProductStatus(id, status, user);
   }
 
   @Delete('/:id')
-  deleteProduct(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.productsService.deleteProduct(id);
+  deleteProduct(
+    @Param('id', ParseIntPipe) id: number,
+    @GetUser() user: User,
+  ): Promise<void> {
+    return this.productsService.deleteProduct(id, user);
   }
 }

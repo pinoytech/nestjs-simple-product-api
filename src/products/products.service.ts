@@ -23,15 +23,24 @@ export class ProductsService {
     return this.productRepository.createProduct(createProductDto, user);
   }
 
-  async getAllProducts(filterDto: ProductFilterDto): Promise<Product[]> {
-    return this.productRepository.getAllProducts(filterDto);
+  async getAllProducts(
+    filterDto: ProductFilterDto,
+    user: User,
+  ): Promise<Product[]> {
+    return this.productRepository.getAllProducts(filterDto, user);
   }
 
   async updateProduct(
     id: number,
     updateProductDto: UpdateProductDto,
+    user: User,
   ): Promise<Product> {
-    const product = await this.productRepository.findOne(id);
+    const product = await this.productRepository.findOne({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
     const updatedProduct = { ...product, ...updateProductDto };
     return this.productRepository.save(updatedProduct);
   }
@@ -39,23 +48,32 @@ export class ProductsService {
   async updateProductStatus(
     id: number,
     status: ProductStatus,
+    user: User,
   ): Promise<Product> {
-    const product = await this.getProductById(id);
+    const product = await this.getProductById(id, user);
     product.status = status;
     await product.save();
     return product;
   }
 
-  async deleteProduct(id: number): Promise<void> {
-    const result = await this.productRepository.delete(id);
+  async deleteProduct(id: number, user: User): Promise<void> {
+    const result = await this.productRepository.delete({
+      id,
+      userId: user.id,
+    });
     console.log(result);
     if (!result.affected) {
       throw new NotFoundException('Could not find product.');
     }
   }
 
-  async getProductById(id: number): Promise<Product> {
-    const product = await this.productRepository.findOne(id);
+  async getProductById(id: number, user: User): Promise<Product> {
+    const product = await this.productRepository.findOne({
+      where: {
+        id,
+        userId: user.id,
+      },
+    });
     if (!product) {
       throw new NotFoundException('Could not find product.');
     }

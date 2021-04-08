@@ -7,9 +7,14 @@ import { Product } from './product.entity';
 
 @EntityRepository(Product)
 export class ProductRepository extends Repository<Product> {
-  async getAllProducts(filterDto: ProductFilterDto): Promise<Product[]> {
+  async getAllProducts(
+    filterDto: ProductFilterDto,
+    user: User,
+  ): Promise<Product[]> {
     const { status, search } = filterDto;
     const query = this.createQueryBuilder('product');
+
+    query.andWhere('product.userId = :userId', { userId: user.id });
 
     if (status) {
       query.andWhere('product.status = :status', { status });
@@ -17,10 +22,11 @@ export class ProductRepository extends Repository<Product> {
 
     if (search) {
       query.andWhere(
-        'LOWER(product.name) LIKE :search OR LOWER(product.description) LIKE :search',
+        '(LOWER(product.name) LIKE :search OR LOWER(product.description) LIKE :search)',
         { search: `%${search.toLowerCase()}%` },
       );
     }
+
     const products = await query.getMany();
     return products;
   }
